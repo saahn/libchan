@@ -4,7 +4,7 @@ import (
 	"io"
 	"net"
 
-	"github.com/docker/libchan"
+	"github.com/saahn/libchan"
 )
 
 type pipeSender struct {
