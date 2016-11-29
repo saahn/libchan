@@ -4,7 +4,7 @@ import (
 	"io"
 	"net"
 	"net/http"
-
+	"log"
 	"github.com/saahn/spdystream"
 )
 
