@@ -4,7 +4,7 @@ import (
 	"io"
 	"net"
 	"net/http"
-
+	"log"
 	"github.com/saahn/spdystream"
 )
 
@@ -108,7 +108,8 @@ func (l *spdyStreamListener) Accept() (Stream, error) {
 	select {
 	case stream = <-l.listenChan:
 	case <-l.closeChan:
-		// Handle spdyConn shutdown
+		log.Print("WARN: spdyStreamListener got spdyConn shutdown")
+		return nil, io.EOF
 	}
 	if stream == nil {
 		return nil, io.EOF

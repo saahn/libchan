@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"sync"
 	"sync/atomic"
+	"log"
 
 	"github.com/dmcgowan/msgpack"
 	"github.com/saahn/libchan"
@@ -264,18 +265,27 @@ func (r *receiver) Receive(message interface{}) error {
 func (r *receiver) SendTo(dst libchan.Sender) (int, error) {
 	var n int
 	for {
+		log.Printf("&&&&& in spdy.session.SendTo for loop. n is %d", n)
 		var rm msgpack.RawMessage
 		if err := r.Receive(&rm); err == io.EOF {
 			break
 		} else if err != nil {
+			log.Printf("##### EXITED spdy.session.SendTo for loop. n is %d and err is %v", n, err)
 			return n, err
 		}
-
+		log.Printf("+++ Receiver is sending to: %+v", dst)
+		log.Printf("+++ Receiver is sending received msg: %+v", rm)
 		if err := dst.Send(&rm); err != nil {
+			log.Printf("##### EXITED spdy.session.SendTo for loop. n is %d and err is %v", n, err)
 			return n, err
 		}
+		//r.stream.Close()
+		//dst.Close()
+		//dst = nil
 		n++
+		//break
 	}
+	log.Printf("##### EXITED spdy.session.SendTo for loop. n is %d", n)
 	return n, nil
 }
 
